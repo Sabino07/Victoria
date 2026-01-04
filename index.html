@@ -22,26 +22,40 @@ body {
     z-index: 2;
 }
 
-.photo {
+/* CONTAINER DAS FOTOS */
+.photo-container {
+    position: relative;
     width: min(80vw, 420px);
     height: min(80vw, 420px);
+    margin: auto;
+}
+
+/* FOTO */
+.photo {
+    position: absolute;
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
+    object-fit: cover;
     border: 6px solid white;
     box-shadow: 0 0 40px rgba(255,255,255,0.8);
-    animation: pulse 2.5s infinite;
+    opacity: 0;
+    transition: opacity 1.5s ease, transform 1.5s ease;
+    transform: scale(0.95);
 }
 
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.06); }
-    100% { transform: scale(1); }
+.photo.active {
+    opacity: 1;
+    transform: scale(1);
 }
 
+/* TEXTO */
 h1 {
     margin: 25px 0;
     text-shadow: 0 0 15px rgba(255,255,255,0.6);
 }
 
+/* BOTÕES */
 .buttons {
     display: flex;
     gap: 20px;
@@ -78,7 +92,7 @@ button {
     font-weight: bold;
     display: none;
     z-index: 10;
-    text-shadow: 0 0 25px rgba(255,255,255,0.9);
+    text-shadow: 0 0 15px rgba(255,255,255,0.9);
 }
 
 /* CORAÇÕES */
@@ -99,8 +113,30 @@ button {
 </audio>
 
 <div class="container">
-    <img src="Teamo.png" class="photo">
-    <h1>VICTORIA FERNANDES ALVES,<br>VOCÊ ACEITA SE CASAR COMIGO? 💍❤️</h1>
+
+    <!-- FOTOS ROTATIVAS -->
+    <div class="photo-container">
+        <img src="Teamo.png" class="photo active">
+        <img src="Teamo1.png" class="photo">
+        <img src="Teamo2.png" class="photo">
+        <img src="Teamo3.png" class="photo">
+        <img src="Teamo5.png" class="photo">
+        <img src="Teamo6.png" class="photo">
+        <img src="Teamo7.png" class="photo">
+        <img src="Teamo8.png" class="photo">
+        <img src="Teamo9.png" class="photo">
+        <img src="Teamo10.png" class="photo">
+        <img src="Teamo11.png" class="photo">
+        <img src="Teamo12.png" class="photo">
+        <img src="Teamo13.png" class="photo">
+        <img src="Teamo14.png" class="photo">
+        <img src="Teamo15.png" class="photo">
+    </div>
+
+    <h1>
+        VICTORIA FERNANDES ALVES,<br>
+        VOCÊ ACEITA SE CASAR COMIGO? 💍❤️
+    </h1>
 
     <div class="buttons">
         <button id="yes" onclick="accept()">SIM 💖</button>
@@ -111,6 +147,17 @@ button {
 <div class="loveText" id="loveText">EU TE AMOOOO! ❤️</div>
 
 <script>
+/* ===== FOTOS RODANDO ===== */
+let currentPhoto = 0;
+const photos = document.querySelectorAll('.photo');
+
+setInterval(() => {
+    photos[currentPhoto].classList.remove('active');
+    currentPhoto = (currentPhoto + 1) % photos.length;
+    photos[currentPhoto].classList.add('active');
+}, 3500);
+
+/* ===== CORAÇÃO GRANDE ===== */
 let hearts = [];
 let t = 0;
 let started = false;
@@ -121,11 +168,7 @@ function accept() {
 
     if (!started) {
         started = true;
-
-        for (let i = 0; i < 40; i++) {
-            createHeart(i);
-        }
-
+        for (let i = 0; i < 40; i++) createHeart(i);
         animate();
     }
 }
@@ -136,7 +179,6 @@ function createHeart(offset) {
     h.innerHTML = "❤️";
     h.style.fontSize = (Math.random() * 20 + 35) + "px";
     document.body.appendChild(h);
-
     hearts.push({ el: h, offset });
 }
 
@@ -146,7 +188,6 @@ function animate() {
     hearts.forEach(h => {
         const a = t + h.offset * 0.25;
 
-        // Equação do coração ❤️
         const x = 16 * Math.pow(Math.sin(a), 3);
         const y =
             13 * Math.cos(a)
@@ -164,6 +205,7 @@ h.el.style.transform =
     requestAnimationFrame(animate);
 }
 
+/* ===== BOTÃO NÃO ===== */
 function run() {
     const no = document.getElementById("no");
     no.style.left = Math.random() * (window.innerWidth - 120) + "px";
