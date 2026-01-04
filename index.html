@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>💍 Pedido Especial</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #ff5f9e, #ff8ccf);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    text-align: center;
+    color: white;
+    z-index: 2;
+}
+
+.photo {
+    width: min(80vw, 420px);
+    height: min(80vw, 420px);
+    border-radius: 50%;
+    border: 6px solid white;
+    box-shadow: 0 0 40px rgba(255,255,255,0.8);
+    animation: pulse 2.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+    100% { transform: scale(1); }
+}
+
+h1 {
+    margin: 25px 0;
+    text-shadow: 0 0 15px rgba(255,255,255,0.6);
+}
+
+.buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+button {
+    padding: 15px 45px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#yes {
+    background: white;
+    color: #ff3f8b;
+}
+
+#no {
+    background: #ff2f7b;
+    color: white;
+    position: relative;
+}
+
+/* TEXTO EU TE AMO */
+.loveText {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3em;
+    font-weight: bold;
+    display: none;
+    z-index: 10;
+    text-shadow: 0 0 25px rgba(255,255,255,0.9);
+}
+
+/* CORAÇÕES */
+.heart {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    pointer-events: none;
+    text-shadow: 0 0 15px rgba(255,255,255,0.9);
+}
+</style>
+</head>
+
+<body>
+
+<audio id="music" loop>
+    <source src="Som.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container">
+    <img src="Teamo.png" class="photo">
+    <h1>VICTORIA FERNANDES ALVES,<br>VOCÊ ACEITA SE CASAR COMIGO? 💍❤️</h1>
+
+    <div class="buttons">
+        <button id="yes" onclick="accept()">SIM 💖</button>
+        <button id="no" onmouseover="run()">NÃO 😅</button>
+    </div>
+</div>
+
+<div class="loveText" id="loveText">EU TE AMOOOO! ❤️</div>
+
+<script>
+let hearts = [];
+let t = 0;
+let started = false;
+
+function accept() {
+    document.getElementById("music").play();
+    document.getElementById("loveText").style.display = "block";
+
+    if (!started) {
+        started = true;
+
+        for (let i = 0; i < 40; i++) {
+            createHeart(i);
+        }
+
+        animate();
+    }
+}
+
+function createHeart(offset) {
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.innerHTML = "❤️";
+    h.style.fontSize = (Math.random() * 20 + 35) + "px";
+    document.body.appendChild(h);
+
+    hearts.push({ el: h, offset });
+}
+
+function animate() {
+    t += 0.01;
+
+    hearts.forEach(h => {
+        const a = t + h.offset * 0.25;
+
+        // Equação do coração ❤️
+        const x = 16 * Math.pow(Math.sin(a), 3);
+        const y =
+            13 * Math.cos(a)
+            - 5 * Math.cos(2 * a)
+            - 2 * Math.cos(3 * a)
+            - Math.cos(4 * a);
+
+        const scale = 30;
+        const offsetY = 90;
+
+h.el.style.transform =
+    `translate(${x * scale}px, ${-y * scale + offsetY}px)`;
+    });
+
+    requestAnimationFrame(animate);
+}
+
+function run() {
+    const no = document.getElementById("no");
+    no.style.left = Math.random() * (window.innerWidth - 120) + "px";
+    no.style.top = Math.random() * (window.innerHeight - 80) + "px";
+}
+</script>
+
+</body>
+</html>
